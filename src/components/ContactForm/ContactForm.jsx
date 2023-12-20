@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
+import { addContacts } from '../../redux/api';
 import { useState } from 'react';
 import {
   Form,
@@ -10,28 +10,28 @@ import {
 
  export const ContactForm = ()=> {
   const[name,setName]= useState('');
-  const[number,setNumber]= useState('');
+  const[phone,setPhone]= useState('');
   const getContacts = state =>state.contacts;
   const contacts = useSelector(getContacts );
   const dispatch = useDispatch();
 
   const handleInputChange = event => {
     if(event.target.name === 'name') setName(event.target.value.trim());
-    if(event.target.name === 'number') setNumber(event.target.value.trim());
+    if(event.target.name === 'phone') setPhone(event.target.value.trim());
   };
 
   const handleFormSubmit = event => {
     event.preventDefault();
-   const dataForm = {name: name, number: number};
+   const dataForm = {name: name, phone: phone};
    const existingContact = contacts.find(
           contact => contact.name.toLowerCase() === dataForm.name.toLowerCase()
          );
         if (existingContact) {
            return alert(`${dataForm.name} is already in contacts`);
         }
-        dispatch(addContact(dataForm));
+        dispatch(addContacts(dataForm));
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
     return (
@@ -55,9 +55,9 @@ import {
             <Input
               onChange={handleInputChange}
               type="tel"
-              name="number"
+              name="phone"
               placeholder="Enter phone number"
-              value={number}
+              value={phone}
               pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
               required
             ></Input>
