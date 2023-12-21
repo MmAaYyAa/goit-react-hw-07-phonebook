@@ -1,11 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {getContacts} from '../redux/selectors';
+import { fetchContacts } from '../redux/api';
 import ContactForm from './ContactForm/ContactForm';
 import ContactsList from './ContactsList/ContactsList';
 import Filter from './Filter/Filter';
 
-
-
 export const App =  () => {
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector(getContacts);
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 // const[contacts,setContacts]= useState(()=>{
 //   return JSON.parse(window.localStorage.getItem('contacts'))?? [];
 // });
@@ -59,6 +65,8 @@ export const App =  () => {
           <ContactForm/>
           {/* <h2>Contacts</h2> */}
           <Filter />
+          {isLoading && <b>Loading contacts...</b>}
+        {error && <b>{error}</b>}
           <ContactsList/>
         </div>
       </>
